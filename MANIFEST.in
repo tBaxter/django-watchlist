@@ -1,0 +1,5 @@
+include LICENSE README.md CHANGES.md
+recursive-include watchlist *.html
+recursive-include watchlist *.json
+recursive-include watchlist *.md
+recursive-include docs *.txt

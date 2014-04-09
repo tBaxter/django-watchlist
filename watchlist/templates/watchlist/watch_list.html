@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Watch List: {% endblock %}
+
+{% block extrascript %}
+  <script>
+    $(document).ready(function() {
+      $('a.unwatch').click(function(e)   {
+        var thisUrl = this.href,
+            container = $(this);
+        $.post(thisUrl, {rating: $(this).html()}, function(html) {
+            $(container).html('x').parent().slideUp('slow');
+        });
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <h1>Watch List</h1>
+  
+  {% if watch_list %}
+    {% if from_session %}
+      {% for key, value in watch_list.items %}
+        <h2>{{ key|capfirst }}s</h2>
+        <ul>
+          {% for obj in value %}
+            <li>
+              <a href="/watch/{{key}}/{{obj.id}}/remove/" title="Remove this {{ key }}." class="unwatch no">&#10008;</a>
+              <a href="{{ obj.get_absolute_url }}">{% firstof obj.get_full_name obj.name obj.title obj %}</a>
+              {% if obj.updated %}
+                <span class="meta">Last updated: {{obj.updated|date:"N j"}}</span>
+              {% endif %}       
+            </li>
+          {% endfor %}
+        </ul>
+      {% endfor %} 
+    {% else %}
+      {# from DB, not session #}
+      {% regroup watch_list by content_type as watching %}
+      {% for w in watching %}
+        <h2>{{ w.grouper|capfirst }}s</h2>
+        <ul>
+          {% for i in w.list %}
+            {% with i.content_object as obj %}
+              <li>
+                <a href="/watch/{{w.grouper}}/{{obj.id}}/remove/" title="Remove this {{ w.grouper }}." class="unwatch no">
+                  &#10008;
+                </a>
+                <a href="{{ obj.get_absolute_url }}">{% firstof obj.get_full_name obj.name obj.title obj %}</a>
+                {% if obj.updated %}
+                  <span class="meta">Last updated: {{obj.updated|date:"N j"}}</span>
+                {% endif %}
+              </li>
+           {% endwith %}
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    {% endif %}
+  {% else %}
+    <h2>No watched items found</h2>
+  {% endif %}
+{% endblock %}
