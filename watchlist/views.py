@@ -15,12 +15,15 @@ def watch(request, content_type, obj_id):
     Adds item to watch list.
     """
     ctype = ContentType.objects.get(id=content_type)
-    obj   = ctype.get_object_for_this_type(pk=obj_id)
+    obj = ctype.get_object_for_this_type(pk=obj_id)
 
     # see if we have a logged in user and we can get that user
     watchlist = "watchlist: "
     if request.user.is_authenticated():
-        if len(Watch.objects.filter(subscriber=request.user, content_type=ctype.id, object_id=obj_id)) == 0:
+        if len(Watch.objects.filter(
+                subscriber=request.user,
+                content_type=ctype.id,
+                object_id=obj_id)) == 0:
             watchitem = Watch(subscriber=request.user, content_type=ctype, object_id=obj_id)
             watchitem.save()
     else:  # no logged in user, so check session for watching, and add object
@@ -47,7 +50,11 @@ def unwatch(request, content_type, obj_id):
     """ Removes watched item from watch list. """
     ctype = ContentType.objects.get(model=content_type)
     try:
-        watchItem = Watch.objects.get(subscriber=request.user, content_type=ctype.id, object_id=obj_id)
+        watchItem = Watch.objects.get(
+            subscriber=request.user,
+            content_type=ctype.id,
+            object_id=obj_id
+        )
         watchItem.delete()
     except:
         try:
@@ -64,14 +71,14 @@ def unwatch(request, content_type, obj_id):
 
 def watchlist(request, slug=''):
     """ Returns list of all watched items. """
-    watch_items  = []
+    watch_items = []
     from_session = False
     try:
         if slug:
             user = UserModel.objects.get(username=slug)
         else:
             user = UserModel.objects.get(id=request.user.id)
-        watch_items           = Watch.objects.filter(subscriber=user)
+        watch_items = Watch.objects.filter(subscriber=user)
     except:
         if 'watchlist' in request.session:
             watch_cookie_dict = request.session['watchlist']
