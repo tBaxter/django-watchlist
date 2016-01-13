@@ -1,2 +1,14 @@
 
 *.pyc
+
+*.gz
+
+django_watchlist.egg-info/dependency_links.txt
+
+django_watchlist.egg-info/not-zip-safe
+
+django_watchlist.egg-info/PKG-INFO
+
+django_watchlist.egg-info/SOURCES.txt
+
+django_watchlist.egg-info/top_level.txt
