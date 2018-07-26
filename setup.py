@@ -7,7 +7,7 @@ from setuptools import find_packages
 
 setup(
     name='django-watchlist',
-    version='0.2.0',
+    version='0.4.0',
     author=u'Tim Baxter',
     author_email='mail.baxter@gmail.com',
     url='http://github.com/tBaxter/django-watchlist',

@@ -1,25 +1,18 @@
-from django.conf.urls import patterns, url
+from django.urls import path
 
-urlpatterns = patterns(
-    '',
-    url(
-        regex=r'^(?P<content_type>[-\w]+)/(?P<obj_id>\d+)/add/$',
-        view='watchlist.views.watch',
+from . import views
+
+urlpatterns =[
+    path(
+        '<slug:content_type>/<int:obj_id>/add/',
+        views.watch,
         name="add_to_watchlist"
     ),
-    url(
-        regex=r'^(?P<content_type>[-\w]+)/(?P<obj_id>\d+)/remove/$',
-        view='watchlist.views.unwatch',
+    path(
+        '<slug:content_type>/<int:obj_id>/remove/',
+        views.unwatch,
         name="remove_from_watchlist"
     ),
-    url(
-        regex=r'^(?P<slug>[-\w]+)/$',
-        view='watchlist.views.watchlist',
-        name="user_watchlist"
-    ),
-    url(
-        name="watchlist",
-        regex=r'^$',
-        view='watchlist.views.watchlist'
-    ),
-)
+    path('<slug:slug>/', views.watchlist, name="user_watchlist"),
+    path('', views.watchlist, name="watchlist"),
+]

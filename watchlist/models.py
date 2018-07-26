@@ -7,8 +7,8 @@ UserModel = getattr(settings, "AUTH_USER_MODEL", "auth.User")
 
 
 class Watch(models.Model):
-    subscriber = models.ForeignKey(UserModel, verbose_name="Subscriber")
-    content_type = models.ForeignKey(ContentType)
+    subscriber = models.ForeignKey(UserModel, verbose_name="Subscriber", on_delete='CASCADE')
+    content_type = models.ForeignKey(ContentType, on_delete='CASCADE')
     content_object = GenericForeignKey()
     object_id = models.IntegerField('object ID')
     created = models.DateTimeField(auto_now_add=True)
